@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dubai Calling — Countdown</title>
+    <style>
+      :root {
+        --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --accent: #00d1ff;
+        --muted: #b0c7dd;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+      * { box-sizing: border-box; }
+      html, body, #root { height: 100%; }
+      body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: var(--bg);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .card {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 750px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: var(--accent);
+      }
+      .clock {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+      .unit {
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 15px;
+        padding: 20px;
+        min-width: 100px;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .unit:hover {
+        transform: scale(1.05);
+      }
+      .value {
+        font-size: 2rem;
+        font-weight: bold;
+      }
+      .label {
+        margin-top: 5px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+      .expired {
+        padding: 15px;
+        border-radius: 10px;
+        background: rgba(255, 0, 0, 0.1);
+        color: #ffbaba;
+        margin-top: 15px;
+        border: 1px solid rgba(255, 0, 0, 0.2);
+      }
+      h3 {
+        margin-top: 20px;
+        font-weight: 400;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card" id="root">
+      <h1>Dubai Calling, Krishma muturu !</h1>
+      <div class="clock" id="clock" aria-live="polite">
+        <div class="unit"><div class="value" id="days">0</div><div class="label">Days</div></div>
+        <div class="unit"><div class="value" id="hours">00</div><div class="label">Hours</div></div>
+        <div class="unit"><div class="value" id="minutes">00</div><div class="label">Minutes</div></div>
+        <div class="unit"><div class="value" id="seconds">00</div><div class="label">Seconds</div></div>
+      </div>
+      <div id="message" style="display:none" class="expired" role="status"></div>
+      <h3>The countdown is almost over, and I can’t wait to see you here. This is the start of an exciting new chapter, a place full of opportunities, dreams, and endless possibilities. You’ll do amazing in finding the right job, building your career, and creating a beautiful life here.</h3>
+      <br/>
+      <h3>Be confident, stay positive, and trust yourself. You are capable of amazing things. Wishing you all the success and happiness as you start this exciting journey.</h3>
+    </div>
+    <script>
+      const targetUtcMs = Date.UTC(2025, 7, 13, 17, 45, 0);
+      const $days = document.getElementById('days');
+      const $hours = document.getElementById('hours');
+      const $minutes = document.getElementById('minutes');
+      const $seconds = document.getElementById('seconds');
+      const $message = document.getElementById('message');
+      function pad(n){return n.toString().padStart(2,'0')}
+      function update(){
+        const now = Date.now();
+        let diff = targetUtcMs - now;
+        if (diff <= 0){
+          $days.textContent = '0';
+          $hours.textContent = '00';
+          $minutes.textContent = '00';
+          $seconds.textContent = '00';
+          $message.style.display = 'block';
+          $message.textContent = 'The countdown has ended. Dubai Calling is over (as of August 13, 2025 23:30 NPT).';
+          clearInterval(timer);
+          return;
+        }
+        const secsTotal = Math.floor(diff / 1000);
+        const days = Math.floor(secsTotal / 86400);
+        const hours = Math.floor((secsTotal % 86400) / 3600);
+        const minutes = Math.floor((secsTotal % 3600) / 60);
+        const seconds = secsTotal % 60;
+        $days.textContent = days;
+        $hours.textContent = pad(hours);
+        $minutes.textContent = pad(minutes);
+        $seconds.textContent = pad(seconds);
+      }
+      update();
+      const timer = setInterval(update, 1000);
+    </script>
+  </body>
+</html>
